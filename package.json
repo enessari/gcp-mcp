@@ -8,9 +8,12 @@
   },
   "scripts": {
     "start": "tsx index.ts",
+    "start:server": "tsx src/server.ts",
+    "start:client": "tsx src/claude-desktop-client.ts",
     "prepare": "npm run build",
     "build": "tsc",
     "dev": "tsx watch index.ts",
+    "dev:server": "tsx watch src/server.ts",
     "test": "tsx bin.js"
   },
   "keywords": [
@@ -32,17 +35,23 @@
     "@google-cloud/logging": "^11.2.0",
     "@google-cloud/resource-manager": "^5.3.1",
     "@google-cloud/run": "^1.5.1",
+    "@google-cloud/secret-manager": "^5.6.0",
     "@google-cloud/sql": "^0.19.1",
     "@google-cloud/storage": "^7.15.0",
     "@modelcontextprotocol/sdk": "^1.6.1",
+    "express": "^4.18.2",
     "google-auth-library": "^9.0.0",
     "googleapis": "^146.0.0",
+    "node-ssh": "^13.2.0",
     "ts-morph": "^24.0.0",
     "tsx": "^4.19.2",
+    "ws": "^8.16.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/express": "^4.17.21",
     "@types/node": "^22.10.2",
+    "@types/ws": "^8.5.10",
     "tslib": "^2.8.1",
     "typescript": "^5.7.2"
   },

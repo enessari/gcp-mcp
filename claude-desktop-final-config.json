@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "gcp-mcp-cloud-run": {
+      "command": "node",
+      "args": [
+        "/Users/aes/my-ai-projects/gcp-mcp-project/dist/src/claude-desktop-client.js"
+      ],
+      "env": {
+        "GCP_MCP_URL": "wss://gcp-mcp-XXXXX-uc.a.run.app",
+        "GCP_MCP_TOKEN": ""
+      }
+    }
+  }
+}

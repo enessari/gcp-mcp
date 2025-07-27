@@ -7,6 +7,10 @@ yarn-error.log
 # Build output
 dist/
 build/
+*.js
+*.js.map
+*.d.ts
+!src/**/*.ts
 
 # Environment variables
 .env
