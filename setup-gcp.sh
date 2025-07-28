@@ -78,9 +78,9 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member="serviceAccount:$SERVICE_ACCOUNT_EMAIL" \
   --role="roles/logging.admin"
 
-gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member="serviceAccount:$SERVICE_ACCOUNT_EMAIL" \
-  --role="roles/billing.viewer"
+# Billing viewer needs to be added at organization level
+# For now, we'll skip this and add manually if needed
+echo -e "${YELLOW}Note: Billing viewer role needs to be added manually at organization level${NC}"
 
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member="serviceAccount:$SERVICE_ACCOUNT_EMAIL" \
