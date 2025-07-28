@@ -38,10 +38,10 @@ export REGION="us-central1"
 
 ```bash
 # Make script executable
-chmod +x setup-gcp-safe.sh
+chmod +x setup-gcp.sh
 
 # Run setup (this will enable APIs, create service accounts, etc.)
-./setup-gcp-safe.sh $PROJECT_ID $REGION
+./setup-gcp.sh $PROJECT_ID $REGION
 ```
 
 This script will:
