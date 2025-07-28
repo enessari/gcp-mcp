@@ -5,6 +5,7 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
+COPY tsconfig.json ./
 
 # Install dependencies
 RUN npm ci
@@ -13,7 +14,7 @@ RUN npm ci
 COPY . .
 
 # Build the application
-RUN npm run build
+RUN npm run build || (echo "Build failed, listing files:" && ls -la && ls -la src/ && exit 1)
 
 # Production stage
 FROM node:20-alpine

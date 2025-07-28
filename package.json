@@ -10,7 +10,6 @@
     "start": "tsx index.ts",
     "start:server": "tsx src/server.ts",
     "start:client": "tsx src/claude-desktop-client.ts",
-    "prepare": "npm run build",
     "build": "tsc",
     "dev": "tsx watch index.ts",
     "dev:server": "tsx watch src/server.ts",
