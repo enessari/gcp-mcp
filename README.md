@@ -2,8 +2,6 @@
 
 A Model Context Protocol (MCP) server that enables AI assistants like Claude to interact with your Google Cloud Platform environment through Cloud Run deployment. This version includes SSH access to VMs and database query capabilities through secure tunnels.
 
-![GCP MCP Demo](images/claude.png)
-
 ## 🚀 Key Features
 
 * ☁️ **Cloud Run Deployment**: Scalable, serverless deployment
