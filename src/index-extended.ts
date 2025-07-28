@@ -4,7 +4,7 @@ import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprot
 import { SSH_TOOLS, SSHToolHandlers } from "./ssh-extended-tools";
 
 // Import existing tools and handlers
-import { existingTools, existingHandlers } from "../index";
+// import { existingTools, existingHandlers } from "../index";
 
 export async function createExtendedServer() {
   const server = new Server(
@@ -24,7 +24,7 @@ export async function createExtendedServer() {
   // Register all tools (existing + SSH)
   server.setRequestHandler(ListToolsRequestSchema, async () => {
     return {
-      tools: [...existingTools, ...SSH_TOOLS],
+      tools: [...SSH_TOOLS],
     };
   });
 
@@ -47,7 +47,10 @@ export async function createExtendedServer() {
           return await sshHandlers.handleSSHDisconnect();
         default:
           // Fallback to existing handlers
-          return await existingHandlers(name, args);
+          return {
+            error: true,
+            message: `Unknown tool: ${name}`,
+          };
       }
     } catch (error) {
       return {
@@ -62,8 +65,8 @@ export async function createExtendedServer() {
 
 // For Cloud Run deployment
 if (process.env.NODE_ENV === 'production') {
-  const express = require('express');
-  const app = express();
+  import('express').then(({ default: express }) => {
+    const app = express();
   const port = process.env.PORT || 8080;
 
   app.use(express.json());
@@ -76,8 +79,9 @@ if (process.env.NODE_ENV === 'production') {
   // MCP WebSocket endpoint would go here
   // This requires additional setup for WebSocket support on Cloud Run
 
-  app.listen(port, () => {
-    console.log(`GCP MCP Extended server listening on port ${port}`);
+    app.listen(port, () => {
+      console.log(`GCP MCP Extended server listening on port ${port}`);
+    });
   });
 } else {
   // Local development with stdio transport

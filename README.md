@@ -72,6 +72,8 @@ This script will:
      - `_SERVICE_ACCOUNT`: `gcp-mcp-sa@YOUR_PROJECT_ID.iam.gserviceaccount.com`
 3. Click **Create**
 
+> **Note for EU/Organization Restrictions**: If you get permission errors with Artifact Registry in EU regions, use `/cloudbuild-gcr.yaml` instead, which uses Container Registry (gcr.io).
+
 ### Step 5: Deploy to Cloud Run
 
 The deployment will start automatically when you push to main. To trigger manually:

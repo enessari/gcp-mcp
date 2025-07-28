@@ -1,4 +1,4 @@
-import { Transport } from "@modelcontextprotocol/sdk/transport/index.js";
+import { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { JSONRPCMessage } from "@modelcontextprotocol/sdk/types.js";
 import WebSocket from "ws";
 

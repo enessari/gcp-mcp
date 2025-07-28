@@ -1,50 +1,69 @@
 import { Tool } from "@modelcontextprotocol/sdk/types";
-import { z } from "zod";
 import { SSHTools } from "./ssh-tools";
 
 export const SSH_TOOLS: Tool[] = [
   {
     name: "ssh-connect-vm",
     description: "Connect to a Google Compute Engine VM via SSH",
-    inputSchema: z.object({
-      projectId: z.string().describe("GCP project ID"),
-      zone: z.string().describe("GCP zone where the VM is located"),
-      instanceName: z.string().describe("Name of the VM instance"),
-    }).strict(),
+    inputSchema: {
+      type: "object",
+      properties: {
+        projectId: { type: "string", description: "GCP project ID" },
+        zone: { type: "string", description: "GCP zone where the VM is located" },
+        instanceName: { type: "string", description: "Name of the VM instance" },
+      },
+      required: ["projectId", "zone", "instanceName"],
+    },
   },
   {
     name: "ssh-execute-command",
     description: "Execute a command on a connected VM via SSH",
-    inputSchema: z.object({
-      command: z.string().describe("Command to execute on the VM"),
-    }).strict(),
+    inputSchema: {
+      type: "object",
+      properties: {
+        command: { type: "string", description: "Command to execute on the VM" },
+      },
+      required: ["command"],
+    },
   },
   {
     name: "ssh-query-database",
     description: "Query a database through SSH tunnel",
-    inputSchema: z.object({
-      dbType: z.enum(["mysql", "postgresql"]).describe("Type of database"),
-      host: z.string().describe("Database host (localhost for SSH tunnel)"),
-      port: z.number().describe("Database port"),
-      database: z.string().describe("Database name"),
-      username: z.string().describe("Database username"),
-      password: z.string().describe("Database password"),
-      query: z.string().describe("SQL query to execute"),
-    }).strict(),
+    inputSchema: {
+      type: "object",
+      properties: {
+        dbType: { type: "string", enum: ["mysql", "postgresql"], description: "Type of database" },
+        host: { type: "string", description: "Database host (localhost for SSH tunnel)" },
+        port: { type: "number", description: "Database port" },
+        database: { type: "string", description: "Database name" },
+        username: { type: "string", description: "Database username" },
+        password: { type: "string", description: "Database password" },
+        query: { type: "string", description: "SQL query to execute" },
+      },
+      required: ["dbType", "host", "port", "database", "username", "password", "query"],
+    },
   },
   {
     name: "ssh-create-tunnel",
     description: "Create an SSH tunnel to a remote service",
-    inputSchema: z.object({
-      localPort: z.number().describe("Local port to bind"),
-      remoteHost: z.string().describe("Remote host to tunnel to"),
-      remotePort: z.number().describe("Remote port to tunnel to"),
-    }).strict(),
+    inputSchema: {
+      type: "object",
+      properties: {
+        localPort: { type: "number", description: "Local port to bind" },
+        remoteHost: { type: "string", description: "Remote host to tunnel to" },
+        remotePort: { type: "number", description: "Remote port to tunnel to" },
+      },
+      required: ["localPort", "remoteHost", "remotePort"],
+    },
   },
   {
     name: "ssh-disconnect",
     description: "Disconnect the current SSH session",
-    inputSchema: z.object({}).strict(),
+    inputSchema: {
+      type: "object",
+      properties: {},
+      required: [],
+    },
   },
 ];
 

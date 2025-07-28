@@ -20,7 +20,7 @@ export class SSHTools {
       // Get instance metadata
       const authClient = await this.auth.getClient();
       const res = await compute.instances.get({
-        auth: authClient,
+        auth: authClient as any,
         project: projectId,
         zone: zone,
         instance: instanceName,
@@ -34,7 +34,7 @@ export class SSHTools {
       }
 
       // Get SSH key from metadata
-      const sshKeys = instance.metadata?.items?.find(item => item.key === 'ssh-keys')?.value;
+      const sshKeys = instance.metadata?.items?.find((item: any) => item.key === 'ssh-keys')?.value;
       
       // Connect via SSH
       await this.ssh.connect({

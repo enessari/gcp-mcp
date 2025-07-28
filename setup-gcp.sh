@@ -12,6 +12,12 @@ REGION=${2:-"us-central1"}
 SERVICE_NAME="gcp-mcp"
 SERVICE_ACCOUNT_NAME="gcp-mcp-sa"
 
+# Check if region is in EU and warn
+if [[ "$REGION" == eu-* ]]; then
+  echo -e "${YELLOW}Warning: EU regions may have organization policies. Trying US region if EU fails.${NC}"
+  FALLBACK_REGION="us-central1"
+fi
+
 echo -e "${GREEN}Setting up GCP MCP Server on Cloud Run${NC}"
 echo -e "${YELLOW}Project ID: $PROJECT_ID${NC}"
 echo -e "${YELLOW}Region: $REGION${NC}"
@@ -117,14 +123,35 @@ gcloud secrets add-iam-policy-binding gcp-mcp-ssh-public-key \
 echo -e "${GREEN}Setting up Artifact Registry...${NC}"
 REPO_NAME="cloud-run-images"
 
+# Try to create in the specified region first
 if gcloud artifacts repositories describe $REPO_NAME --location=$REGION &>/dev/null; then
-  echo -e "${YELLOW}Artifact Registry repository already exists${NC}"
+  echo -e "${YELLOW}Artifact Registry repository already exists in $REGION${NC}"
 else
   echo -e "${GREEN}Creating Artifact Registry repository...${NC}"
-  gcloud artifacts repositories create $REPO_NAME \
+  if ! gcloud artifacts repositories create $REPO_NAME \
     --repository-format=docker \
     --location=$REGION \
-    --description="Docker images for Cloud Run"
+    --description="Docker images for Cloud Run" 2>/dev/null; then
+    
+    # If failed and we have a fallback region, try that
+    if [ ! -z "$FALLBACK_REGION" ]; then
+      echo -e "${YELLOW}Failed to create in $REGION, trying $FALLBACK_REGION...${NC}"
+      REGION=$FALLBACK_REGION
+      
+      if gcloud artifacts repositories create $REPO_NAME \
+        --repository-format=docker \
+        --location=$REGION \
+        --description="Docker images for Cloud Run"; then
+        echo -e "${GREEN}Successfully created in $REGION${NC}"
+        echo -e "${YELLOW}Note: Update your Cloud Build trigger to use region: $REGION${NC}"
+      else
+        echo -e "${RED}Failed to create Artifact Registry. You may need to create it manually.${NC}"
+        echo -e "${YELLOW}Try: gcloud artifacts repositories create $REPO_NAME --repository-format=docker --location=us-central1${NC}"
+      fi
+    else
+      echo -e "${RED}Failed to create Artifact Registry. Check organization policies.${NC}"
+    fi
+  fi
 fi
 
 echo -e "${GREEN}Setup complete!${NC}"
